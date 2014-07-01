@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template name="addNewPost" xmlns="http://ws.apache.org/ns/synapse">
+
+    <parameter name="inputUrl" description="required — The url of the item"/>
+    <parameter name="inputDescription" description="required — The description of the item."/>
+    <parameter name="inputExtended" description="optional — Notes for the item."/>
+    <parameter name="inputTags" description="optional — Tags for the item (comma delimited)"/>
+    <parameter name="inputDt" description="{CCYY-MM-DDThh:mm:ssZ} optional — Datestamp of the item"/>
+    <parameter name="inputReplace" description="{no} optional — Don’t replace post if given url has already been posted"/>
+    <parameter name="inputShare" description="{no} optional — Make the item private"/>
+
+    <sequence>
+
+        <property name="uri.var.inputUrl" expression="$func:inputUrl" type="STRING"/>
+        <property name="uri.var.inputDescription" expression="$func:inputDescription" type="STRING"/>
+        <property name="uri.var.inputExtended" expression="$func:inputExtended" type="STRING"/>
+        <property name="uri.var.inputTags" expression="$func:inputTags" type="STRING"/>
+        <property name="uri.var.inputDt" expression="$func:inputDt" type="STRING"/>
+        <property name="uri.var.inputReplace" expression="$func:inputReplace" type="STRING"/>
+        <property name="uri.var.inputShare" expression="$func:inputShare" type="STRING"/>
+
+
+         <property name="uri.var.apiParameters"
+                 expression="fn:concat(get-property('uri.var.apiParameters'),'&amp;url=',get-property('uri.var.inputUrl'),'&amp;description=',get-property('uri.var.inputDescription'))" />
+
+       <!--  <property name="uri.var.apParameters"
+                 expression="fn:concat(get-property('uri.var.apiParameters'),'&amp;description=',get-property('uri.var.inputDescription'))" /> -->
+
+        <filter
+                xpath="(not(get-property('uri.var.inputExtended') = '' or (not(string(get-property('uri.var.inputExtended'))))))">
+            <then>
+                <property name="uri.var.apiParameters"
+                          expression="fn:concat(get-property('uri.var.apiParameters'),'&amp;extended=',get-property('uri.var.inputExtended'))" />
+            </then>
+        </filter>
+
+        <filter
+                xpath="(not(get-property('uri.var.inputTags') = '' or (not(string(get-property('uri.var.inputTags'))))))">
+            <then>
+                <property name="uri.var.apiParameters"
+                          expression="fn:concat(get-property('uri.var.apiParameters'),'&amp;tags=',get-property('uri.var.inputTags'))" />
+            </then>
+        </filter>
+
+        <filter
+                xpath="(not(get-property('uri.var.inputDt') = '' or (not(string(get-property('uri.var.inputDt'))))))">
+            <then>
+                <property name="uri.var.apiParameters"
+                          expression="fn:concat(get-property('uri.var.apiParameters'),'&amp;dt=',get-property('uri.var.inputDt'))" />
+            </then>
+        </filter>
+
+        <filter
+                xpath="(not(get-property('uri.var.inputReplace') = '' or (not(string(get-property('uri.var.inputReplace'))))))">
+            <then>
+                <property name="uri.var.apiParameters"
+                          expression="fn:concat(get-property('uri.var.apiParameters'),'&amp;replace=',get-property('uri.var.inputReplace'))" />
+            </then>
+        </filter>
+
+        <filter
+                xpath="(not(get-property('uri.var.inputShare') = '' or (not(string(get-property('uri.var.inputShare'))))))">
+            <then>
+                <property name="uri.var.apiParameters"
+                          expression="fn:concat(get-property('uri.var.apiParameters'),'&amp;share=',get-property('uri.var.inputShare'))" />
+            </then>
+        </filter>
+
+        <property name="Accept-Encoding" value="deflate" scope="transport" />
+
+        <payloadFactory media-type="xml">
+            <format>
+                <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                    <soapenv:Header/>
+                    <soapenv:Body/>
+                </soapenv:Envelope>
+            </format>
+            <args />
+        </payloadFactory>
+        <property name="messageType" value="application/xml" scope="axis2" />
+
+        <call>
+            <endpoint>
+                <http method="GET" uri-template="{uri.var.delicious.url}/v1/posts/add?{uri.var.apiParameters}" />
+            </endpoint>
+        </call>
+    </sequence>
+</template>

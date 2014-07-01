@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template name="getPosts" xmlns="http://ws.apache.org/ns/synapse">
+
+    <parameter name="gettag" description="{TAG}+{TAG}+...+{TAG} optional — Filter by this tag"/>
+    <parameter name="getdt" description="{CCYY-MM-DDThh:mm:ssZ} optional — Filter by this date"/>
+    <parameter name="geturl" description="optional — The url of the item"/>
+    <parameter name="gethashes" description="{MD5}+{MD5}+...+{MD5} optional — Fetch multiple bookmarks by one or more URL MD5s"/>
+    <parameter name="getmeta" description="{yes} optional — Include change detection signatures on each item in a ‘meta’ attribute"/>
+    <parameter name="gettag_separator" description="{comma} optional — Use commas instead of spaces to separate tags"/>
+
+    <sequence>
+
+        <property name="uri.var.gettag" expression="$func:gettag" type="STRING"/>
+        <property name="uri.var.getdt" expression="$func:getdt" type="STRING"/>
+        <property name="uri.var.geturl" expression="$func:geturl" type="STRING"/>
+        <property name="uri.var.gethashes" expression="$func:gethashes" type="STRING"/>
+        <property name="uri.var.getmeta" expression="$func:getmeta" type="STRING"/>
+        <property name="uri.var.gettag_separator" expression="$func:gettag_separator" type="STRING"/>
+
+
+
+        <filter
+                xpath="(not(get-property('uri.var.gettag') = '' or (not(string(get-property('uri.var.gettag'))))))">
+            <then>
+                <property name="uri.var.apiParameters"
+                          expression="fn:concat(get-property('uri.var.apiParameters'),'&amp;tag=',get-property('uri.var.gettag'))" />
+            </then>
+        </filter>
+
+        <filter
+                xpath="(not(get-property('uri.var.getdt') = '' or (not(string(get-property('uri.var.getdt'))))))">
+            <then>
+                <property name="uri.var.apiParameters"
+                          expression="fn:concat(get-property('uri.var.apiParameters'),'&amp;dt=',get-property('uri.var.getdt'))" />
+            </then>
+        </filter>
+
+        <filter
+                xpath="(not(get-property('uri.var.geturl') = '' or (not(string(get-property('uri.var.geturl'))))))">
+            <then>
+                <property name="uri.var.apiParameters"
+                          expression="fn:concat(get-property('uri.var.apiParameters'),'&amp;url=',get-property('uri.var.geturl'))" />
+            </then>
+        </filter>
+
+        <filter
+                xpath="(not(get-property('uri.var.gethashes') = '' or (not(string(get-property('uri.var.gethashes'))))))">
+            <then>
+                <property name="uri.var.apiParameters"
+                          expression="fn:concat(get-property('uri.var.apiParameters'),'&amp;hashes=',get-property('uri.var.gethashes'))" />
+            </then>
+        </filter>
+
+        <filter
+                xpath="(not(get-property('uri.var.gettag_separator') = '' or (not(string(get-property('uri.var.gettag_separator'))))))">
+            <then>
+                <property name="uri.var.apiParameters"
+                          expression="fn:concat(get-property('uri.var.apiParameters'),'&amp;tag_separator=',get-property('uri.var.gettag_separator'))" />
+            </then>
+        </filter>
+
+        <filter
+                xpath="(not(get-property('uri.var.getmeta') = '' or (not(string(get-property('uri.var.getmeta'))))))">
+            <then>
+                <property name="uri.var.apiParameters"
+                          expression="fn:concat(get-property('uri.var.apiParameters'),'&amp;meta=',get-property('uri.var.getmeta'))" />
+            </then>
+        </filter>
+
+        <property name="Accept-Encoding" value="deflate" scope="transport" />
+
+        <payloadFactory media-type="xml">
+            <format>
+                <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                    <soapenv:Header/>
+                    <soapenv:Body/>
+                </soapenv:Envelope>
+            </format>
+            <args />
+        </payloadFactory>
+        <property name="messageType" value="application/xml" scope="axis2" />
+
+        <call>
+            <endpoint>
+                <http method="GET" uri-template="{uri.var.delicious.url}/v1/posts/get?{uri.var.apiParameters}" />
+            </endpoint>
+        </call>
+    </sequence>
+</template>

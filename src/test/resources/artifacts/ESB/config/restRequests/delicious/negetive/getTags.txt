@@ -1,0 +1,9 @@
+{"json_payload":
+    {
+    "username":"dummyUsername",
+    "password":"dummyPassword",
+    "Apiurl":"dummyApi",
+    "method":"getTags"
+
+    }
+}

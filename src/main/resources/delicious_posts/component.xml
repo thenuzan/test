@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="delicious_posts" type="synapse/template" >
+    <subComponents> 
+		<component name="getAllBookmarks" >
+	    	<file>postsAll.xml</file>
+	    	<description>Get all bookmarks</description>
+		</component>
+        <component name="addNewPost" >
+            <file>postsAdd.xml</file>
+            <description>Add new bookmark</description>
+        </component>
+        <component name="lastUpdatedTime" >
+            <file>postsUpdate.xml</file>
+            <description>Returns the last updated time</description>
+        </component>
+        <component name="deletePost" >
+            <file>postsDelete.xml</file>
+            <description>Delete post by URL</description>
+        </component>
+        <component name="getPosts" >
+            <file>postsGet.xml</file>
+            <description>Returns one or more posts</description>
+        </component>
+        <component name="getRecentPosts" >
+            <file>postsRecent.xml</file>
+            <description>Returns a list of the most recent posts</description>
+        </component>
+        <component name="getDates" >
+            <file>postsDates.xml</file>
+            <description>Returns a list of dates with the number of posts at each date</description>
+        </component>
+        <component name="suggestPopularTags">
+            <file>postsSuggest.xml</file>
+            <description>Returns a list of popular tags, recommended tags and network tags for a user</description>
+        </component>
+        <component name="postAllHashes">
+            <file>postsAllHashes.xml</file>
+            <description>Returns a change manifest of all posts</description>
+        </component>
+    </subComponents>    
+</component>

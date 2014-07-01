@@ -1,0 +1,10 @@
+{"json_payload":
+    {
+    "username":"dummyUsername",
+    "password":"dummyPassword",
+    "Apiurl":"dummyApi",
+    "method":"setTagsBundles",
+    "bundle":"dummyBundle",
+    "tags":"dummyTags"
+    }
+}

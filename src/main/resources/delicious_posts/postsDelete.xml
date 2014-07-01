@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template name="deletePost" xmlns="http://ws.apache.org/ns/synapse">
+
+    <parameter name="delUrl" description="required — The url of the item"/>
+
+    <sequence>
+        <property name="uri.var.delUrl" expression="$func:delUrl" type="STRING"/>
+
+        <property name="uri.var.apiParameters"
+                  expression="fn:concat(get-property('uri.var.apiParameters'),'&amp;url=',get-property('uri.var.delUrl'))" />
+
+        <property name="Accept-Encoding" value="deflate" scope="transport"/>
+
+        <payloadFactory media-type="xml">
+            <format>
+                <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                    <soapenv:Header/>
+                    <soapenv:Body/>
+                </soapenv:Envelope>
+            </format>
+            <args/>
+        </payloadFactory>
+
+        <property name="messageType" value="application/xml" scope="axis2"/>
+
+        <call>
+            <endpoint>
+                <http method="GET" uri-template="{uri.var.delicious.url}/v1/posts/delete?{uri.var.apiParameters}"/>
+            </endpoint>
+        </call>
+
+    </sequence>
+
+</template>

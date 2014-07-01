@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template name="allTagsBundles" xmlns="http://ws.apache.org/ns/synapse">
+    <parameter name="bundle" description="just the named bundle"/>
+
+	<sequence>
+
+        <property name="uri.var.bundle" expression="$func:bundle" type="STRING"/>
+    <!--    <property name="Accept-Encoding" action="remove" scope="transport" />
+        <property name="Accept-Encoding" value="gzip" scope="transport" />-->
+        <property name="Accept-Encoding" value="deflate" scope="transport" />
+
+       <payloadFactory media-type="xml">
+           <format>
+               <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                   <soapenv:Header/>
+                   <soapenv:Body/>
+               </soapenv:Envelope>
+           </format>
+           <args />
+       </payloadFactory>
+       <property name="messageType" value="application/xml" scope="axis2" />
+
+        <filter
+                xpath="(not(get-property('uri.var.bundle') = '' or (not(string(get-property('uri.var.bundle'))))))">
+            <then>
+                <property name="uri.var.apiParameters"
+                          expression="fn:concat('&amp;bundle=',get-property('uri.var.bundle'))" />
+            </then>
+        </filter>
+
+
+
+       <call>
+           <endpoint>
+               <http method="GET" uri-template="{uri.var.delicious.url}/v1/tags/bundles/all?{uri.var.apiParameters}" />
+           </endpoint>
+       </call>
+   </sequence>
+
+
+</template>

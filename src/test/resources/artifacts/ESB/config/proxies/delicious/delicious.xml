@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proxy xmlns="http://ws.apache.org/ns/synapse"
+       name="delicious"
+       transports="http,https"
+       startOnLoad="true"
+       trace="disable"
+       statistics="disable">
+    <target>
+        <inSequence>
+
+            <property name="uri" expression="json-eval($.json_payload.Apiurl)"/>
+            <property name="password" expression="json-eval($.json_payload.password)"/>
+            <property name="username" expression="json-eval($.json_payload.username)"/>
+            <property name="method" expression="json-eval($.json_payload.method)"/>
+
+
+
+            <delicious.init>
+                <username>{$ctx:username}</username>
+                <password>{$ctx:password}</password>
+                <uri>{$ctx:uri}</uri>
+            </delicious.init>
+
+            <switch source="get-property('method')">
+                <case regex="postGetAll">
+                    <delicious.getAllBookmarks/>
+                </case>
+
+                <case regex="addNewPost">
+                    <property name="inputUrl" expression="json-eval($.json_payload.inputUrl)"/>
+                    <property name="inputDescription" expression="json-eval($.json_payload.inputDescription)"/>
+
+                    <delicious.addNewPost>
+                        <inputUrl>{$ctx:inputUrl}</inputUrl>
+                        <inputDescription>{$ctx:inputDescription}</inputDescription>
+                    </delicious.addNewPost>
+                </case>
+
+                <case regex="postAllHashes">
+                    <delicious.postAllHashes/>
+                </case>
+
+                <case regex="getDates">
+                    <delicious.getDates/>
+                </case>
+
+                <case regex="deletePost">
+                    <property name="delUrl" expression="json-eval($.json_payload.delUrl)"/>
+                    <delicious.deletePost>
+                        <delUrl>{$ctx:delUrl}</delUrl>
+                    </delicious.deletePost>
+                </case>
+
+                <case regex="getPosts">
+                    <delicious.getPosts/>
+                </case>
+
+                <case regex="getRecentPosts">
+                    <delicious.getRecentPosts/>
+                </case>
+
+                <case regex="suggestPopularTags">
+                    <property name="url" expression="json-eval($.json_payload.url)"/>
+                    <delicious.suggestPopularTags>
+                        <url>{$ctx:url}</url>
+                    </delicious.suggestPopularTags>
+                </case>
+
+                <case regex="lastUpdatedTime">
+                    <delicious.lastUpdatedTime/>
+                </case>
+
+
+                <!--comment-->
+
+                <case regex="getTags">
+                    <delicious.getTags/>
+                </case>
+
+                <case regex="allTagsBundles">
+                    <property name="bundle" expression="json-eval($.json_payload.bundle)"/>
+                    <delicious.allTagsBundles>
+                        <bundle>{$ctx:bundle}</bundle>
+                    </delicious.allTagsBundles>
+                </case>
+
+                <case regex="setTagsBundles">
+                    <property name="bundle" expression="json-eval($.json_payload.bundle)"/>
+                    <property name="tags" expression="json-eval($.json_payload.tags)"/>
+                    <delicious.setTagsBundles>
+                        <bundle>{$ctx:bundle}</bundle>
+                        <tags>{$ctx:tags}</tags>
+                    </delicious.setTagsBundles>
+                </case>
+
+                <case regex="deleteTagsBundles">
+                    <property name="bundle" expression="json-eval($.json_payload.delBundle)"/>
+                    <delicious.deleteTagsBundles>
+                        <bundle>{$ctx:bundle}</bundle>
+                    </delicious.deleteTagsBundles>
+                </case>
+
+
+            </switch>
+
+            <respond/>
+        </inSequence>
+        <outSequence>
+            <send/>
+        </outSequence>
+        <faultSequence/>
+    </target>
+</proxy>

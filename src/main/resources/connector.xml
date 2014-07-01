@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connector>
+    <component name="delicious" package="org.wso2.carbon.connector" >
+        <dependency component="delicious_config" />
+        <dependency component="delicious_posts" />
+	    <dependency component="delicious_tagbundles"/>
+	    <dependency component="delicious_tags"/>
+        <description>synapse library for delicious connector</description>
+    </component>
+</connector>

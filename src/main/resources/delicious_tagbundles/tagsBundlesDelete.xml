@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template name="deleteTagsBundles" xmlns="http://ws.apache.org/ns/synapse">
+    <parameter name="bundle" description="Name of the bundle"/>
+      <sequence>
+
+        <property name="uri.var.bundle" expression="$func:bundle" />
+
+        <property name="Accept-Encoding" value="deflate" scope="transport" />
+
+        <payloadFactory media-type="xml">
+            <format>
+                <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                    <soapenv:Header/>
+                    <soapenv:Body/>
+                </soapenv:Envelope>
+            </format>
+            <args />
+        </payloadFactory>
+        <property name="messageType" value="application/xml" scope="axis2" />
+
+        <call>
+            <endpoint>
+                <http method="GET" uri-template="{uri.var.delicious.url}/v1/tags/bundles/delete?bundle={uri.var.bundle}"/>
+            </endpoint>
+        </call>
+    </sequence>
+
+
+</template>

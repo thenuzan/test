@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="delicious_tags" type="synapse/template" >
+    <subComponents>
+        <component name="getTags" >
+            <file>tagsGet.xml</file>
+            <description>Returns a list of tags and number of times used by a user</description>
+        </component>
+    </subComponents>
+</component>

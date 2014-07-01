@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="delicious_tagbundles" type="synapse/template" >
+    <subComponents> 
+		<component name="allTagsBundles" >
+	    		<file>tagsBundlesAll.xml</file>
+	    		<description>Retrieve all of a user’s bundles</description>
+        </component>
+        <component name="setTagsBundles" >
+            <file>tagsBundlesSet.xml</file>
+            <description>Assign a set of tags to a single bundle, wipes away previous settings for bundle</description>
+		</component>
+
+        <component name="deleteTagsBundles" >
+            <file>tagsBundlesDelete.xml</file>
+            <description>Delete a tag bundle</description>
+        </component>
+
+    </subComponents>    
+</component>
